@@ -173,6 +173,30 @@
           </div>
         </div>
         <div id="home-hero-alert" class="alert-pill hidden"></div>
+        <!-- Compact summary cards for quick glance (inside hero) -->
+        <div style="margin-top:var(--sp-4);display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:var(--sp-3)" id="home-compact-summaries">
+          <div class="overview-card" id="summ-weather-card" data-page="weather">
+            <div class="overview-card-icon">☀️</div>
+            <div class="overview-card-body">
+              <div class="overview-card-title">天氣摘要</div>
+              <div class="overview-card-desc">載入中…</div>
+            </div>
+          </div>
+          <div class="overview-card" id="summ-transport-card" data-page="transport">
+            <div class="overview-card-icon">🚆</div>
+            <div class="overview-card-body">
+              <div class="overview-card-title">交通摘要</div>
+              <div class="overview-card-desc">載入中…</div>
+            </div>
+          </div>
+          <div class="overview-card" id="summ-news-card" data-page="news">
+            <div class="overview-card-icon">📰</div>
+            <div class="overview-card-body">
+              <div class="overview-card-title">重要速報</div>
+              <div class="overview-card-desc">載入中…</div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="card hub-header" style="grid-area: weather-header;">
@@ -436,6 +460,7 @@
           </div>
         </div>
       </div>
+      
 
       <!-- Weather mode switch -->
       <div class="card" style="grid-column:span 3">
