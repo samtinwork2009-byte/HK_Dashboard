@@ -110,17 +110,20 @@
     </button>
   </div>
 </nav>
-
-<!-- ══ OFFLINE BANNER ══ -->
-<div id="offline-banner" style="display:none;position:sticky;top:var(--nav-h);z-index:160;
-     background:linear-gradient(135deg,#92400e,#b45309);color:white;
-     padding:var(--sp-2) var(--sp-6);
-     display:none;align-items:center;justify-content:center;gap:var(--sp-3);
-     font-size:var(--text-sm);font-weight:600;border-bottom:2px solid #f59e0b">
-  <span>📡 目前沒有網絡連線 · 顯示上次緩存數據 No internet connection</span>
-</div>
-
-<!-- ══ PAGES ══ -->
+  <nav class="more-menu" aria-label="更多頁面">
+    <div class="more-menu-panel hidden" id="moreMenuPanel">
+      <a href="#" onclick="showPage('bus');toggleMoreMenu()">巴士</a>
+      <a href="#" onclick="showPage('tides');toggleMoreMenu()">潮汐</a>
+      <a href="#" onclick="showPage('parking');toggleMoreMenu()">停車場</a>
+      <a href="#" onclick="showPage('ferry');toggleMoreMenu()">嶼巴</a>
+      <a href="#" onclick="showPage('holidays');toggleMoreMenu()">假期</a>
+      <a href="#" onclick="showPage('climate');toggleMoreMenu()">氣候</a>
+      <a href="#" onclick="showPage('beach');toggleMoreMenu()">泳灘</a>
+      <a href="#" onclick="showPage('map');toggleMoreMenu()">地圖</a>
+      <a href="#" onclick="showPage('cctv');toggleMoreMenu()">道路快拍</a>
+      <a href="#" onclick="showPage('waste');toggleMoreMenu()">回收</a>
+    </div>
+  </nav>
 <div class="page-body">
 
   <!-- ══ WEATHER WARNING BANNER (shown only when active warnings) ══ -->
@@ -144,93 +147,47 @@
 
   <!-- ── HOME PAGE ── -->
   <div id="page-home" class="page active">
-    <div class="dash-grid home-dashboard-grid">
+    <main class="dashboard-grid">
+      <div id="home-widgets" class="dash-grid home-widgets"></div>
+      <div class="dash-grid">
 
-      <div class="card home-hero" id="home-hero" style="grid-area: hero;">
-        <div class="card-head">
-          <div>
-            <div class="card-title"><strong>核心即時資訊</strong> Live Hero</div>
-            <div class="card-sub">日期時間 · 即時天氣 · 空氣質素</div>
-          </div>
-          <span class="card-badge badge-source">資料來源：香港天文台</span>
+      <!-- Hero weather mini -->
+      <div class="card" style="grid-column:span 1; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; min-height:160px; gap:var(--sp-3); background: linear-gradient(135deg, var(--primary-lt), var(--surface));">
+        <img id="h-wicon" src="" style="width:56px;height:56px;object-fit:contain" alt="天氣" onerror="this.style.display='none'">
+        <div>
+          <span class="big-num" id="h-temp">--</span><span class="big-unit">°C</span>
         </div>
-        <div class="home-hero-grid">
-          <div class="hero-clock">
-            <div id="home-hero-date">載入中...</div>
-            <div id="home-hero-time">--:--:--</div>
-            <div class="hero-meta">當前時間 · 即時更新</div>
-          </div>
-          <div class="hero-summary">
-            <div class="hero-temp"><span class="big-num" id="h-temp">--</span><span class="big-unit">°C</span></div>
-            <div class="hero-desc">
-              <img id="h-wicon" src="" style="width:56px;height:56px;object-fit:contain" alt="天氣" onerror="this.style.display='none'">
-              <div>
-                <strong id="h-wdesc">載入中...</strong>
-                <div class="hero-sub" id="h-wtime"></div>
-              </div>
-            </div>
-            <div class="hero-aqhi"><span class="hero-label">AQHI</span><strong id="home-hero-aqhi">--</strong></div>
-          </div>
-        </div>
-        <div id="home-hero-alert" class="alert-pill hidden"></div>
-        <!-- Compact summary cards for quick glance (inside hero) -->
-        <div style="margin-top:var(--sp-4);display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:var(--sp-3)" id="home-compact-summaries">
-          <div class="overview-card" id="summ-weather-card" data-page="weather">
-            <div class="overview-card-icon">☀️</div>
-            <div class="overview-card-body">
-              <div class="overview-card-title">天氣摘要</div>
-              <div class="overview-card-desc">載入中…</div>
-            </div>
-          </div>
-          <div class="overview-card" id="summ-transport-card" data-page="transport">
-            <div class="overview-card-icon">🚆</div>
-            <div class="overview-card-body">
-              <div class="overview-card-title">交通摘要</div>
-              <div class="overview-card-desc">載入中…</div>
-            </div>
-          </div>
-          <div class="overview-card" id="summ-news-card" data-page="news">
-            <div class="overview-card-icon">📰</div>
-            <div class="overview-card-body">
-              <div class="overview-card-title">重要速報</div>
-              <div class="overview-card-desc">載入中…</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="card hub-header" style="grid-area: weather-header;">
-        <div class="card-title"><strong>氣象中心</strong> Weather Hub</div>
-        <div class="card-sub">實時天氣、紫外線、空氣質素與警告</div>
+        <div style="font-size:var(--text-sm);color:var(--text-muted)" id="h-wdesc">載入中...</div>
+        <div class="tag tag-muted" style="font-size:10px" id="h-wtime"></div>
       </div>
 
       <!-- Humidity / UV / Sea -->
-      <div class="card" style="grid-area: humidity; display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:var(--sp-2)">
+      <div class="card" style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:var(--sp-2)">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--info)" stroke-width="1.5"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" opacity=".2"/><path d="M12 2l0 0c0 0-6 7-6 12a6 6 0 0012 0c0-5-6-12-6-12z"/></svg>
         <div><span class="big-num" id="h-hum" style="font-size:var(--text-2xl)">--</span><span class="big-unit" style="font-size:var(--text-base)">%</span></div>
         <div style="font-size:var(--text-xs);color:var(--text-muted)">相對濕度</div>
       </div>
 
-      <div class="card" style="grid-area: uv; display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:var(--sp-2)">
+      <div class="card" style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:var(--sp-2)">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--warning)" stroke-width="1.5"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
         <div><span class="big-num" id="h-uv" style="font-size:var(--text-2xl)">--</span></div>
         <div style="font-size:var(--text-xs);color:var(--text-muted)" id="h-uvd">紫外線指數</div>
       </div>
 
-      <div class="card" style="grid-area: sea; display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:var(--sp-2)">
+      <div class="card" style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:var(--sp-2)">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5"><path d="M2 12c2-3 4-3 6 0s4 3 6 0 4-3 6 0"/><path d="M2 18c2-3 4-3 6 0s4 3 6 0 4-3 6 0"/></svg>
         <div><span class="big-num" id="h-sea" style="font-size:var(--text-2xl)">--</span><span class="big-unit" style="font-size:var(--text-base)">°C</span></div>
         <div style="font-size:var(--text-xs);color:var(--text-muted)">海水溫度</div>
       </div>
 
       <!-- Warning strip -->
-      <div id="h-warn" class="warn-strip hidden" style="grid-area: warning;">
+      <div id="h-warn" class="warn-strip hidden" style="grid-column:span 4">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
         <div id="h-warn-text"></div>
       </div>
 
       <!-- AQHI card -->
-      <div class="card" style="grid-area: aqhi;">
+      <div class="card" style="grid-column:span 2">
         <div class="card-head">
           <div>
             <div class="card-title">空氣質素健康指數 AQHI</div>
@@ -244,13 +201,8 @@
         </div>
       </div>
 
-      <div class="card hub-header" style="grid-area: transport-header;">
-        <div class="card-title"><strong>交通出行易</strong> Transport Hub</div>
-        <div class="card-sub">港鐵、急症室等候、主要路線 ETA 與交通警示</div>
-      </div>
-
       <!-- MTR mini -->
-      <div class="card" style="grid-area: mtr;">
+      <div class="card" style="grid-column:span 2">
         <div class="card-head">
           <div>
             <div class="card-title">港鐵班次 MTR</div>
@@ -265,7 +217,7 @@
       </div>
 
       <!-- AED mini -->
-      <div class="card" style="grid-area: aed;">
+      <div class="card" style="grid-column:span 2">
         <div class="card-head">
           <div>
             <div class="card-title">急症室等候時間</div>
@@ -281,7 +233,7 @@
       </div>
 
       <!-- 9-day forecast mini -->
-      <div class="card" style="grid-area: forecast;">
+      <div class="card" style="grid-column:span 2">
         <div class="card-head">
           <div class="card-title">九天天氣預報</div>
           <span class="card-badge badge-source">香港天文台</span>
@@ -290,7 +242,7 @@
       </div>
 
       <!-- Temperature distribution -->
-      <div class="card" style="grid-area: temps;">
+      <div class="card" style="grid-column:span 4">
         <div class="card-head">
           <div class="card-title">全港各區氣溫分佈 Temperature Distribution</div>
           <span class="card-badge badge-source">香港天文台</span>
@@ -301,7 +253,7 @@
       </div>
 
       <!-- Rainfall -->
-      <div class="card" style="grid-area: rain;">
+      <div class="card" style="grid-column:span 4">
         <div class="card-head">
           <div class="card-title">各區降雨量 Rainfall by District</div>
           <span class="card-badge badge-source">香港天文台</span>
@@ -310,7 +262,7 @@
       </div>
 
       <!-- Hang Seng Index -->
-      <div class="card" style="grid-area: hsi;">
+      <div class="card" style="grid-column:span 2">
         <div class="card-head">
           <div>
             <div class="card-title">📈 恒生指數 HSI</div>
@@ -320,113 +272,17 @@
         </div>
         <div id="fin-hsi"></div>
       </div>
-      <div class="card hub-header" id="weather-hub-header" style="grid-area: weather-header;">
-        <div class="card-title"><strong>氣象中心</strong> Weather Hub</div>
-        <div class="card-sub">實時天氣、紫外線、空氣質素、警告與潮汐</div>
-      </div>
 
-      <div class="card" style="grid-area: tide;">
+      <!-- Exchange Rates -->
+      <div class="card" style="grid-column:span 2">
         <div class="card-head">
           <div>
-            <div class="card-title">潮汐與海況 Tide Overview</div>
-            <div class="card-sub">今日潮汐走勢與地震/海況警示</div>
+            <div class="card-title">💱 港元兌換 Exchange Rates</div>
+            <div class="card-sub" id="fin-fx-sub">載入中...</div>
           </div>
-          <span class="card-badge badge-source">香港天文台</span>
+          <span class="card-badge badge-source">Frankfurter API</span>
         </div>
-        <div id="h-tide-chart" style="min-height:220px"></div>
-        <div id="h-tide-forecast-text" style="margin-top:var(--sp-4)"></div>
-        <div id="h-eq-content" style="margin-top:var(--sp-4)"></div>
-      </div>
-
-      <div class="card hub-header" style="grid-area: transport-header;">
-        <div class="card-title"><strong>交通樞紐</strong> Transport Hub</div>
-        <div class="card-sub">港鐵、輕鐵與巴士一覽，標籤頁內切換</div>
-      </div>
-
-      <div class="card" style="grid-area: transport-main;">
-        <div class="card-head">
-          <div>
-            <div class="card-title">交通總覽 Transport Switcher</div>
-            <div class="card-sub">在首頁內切換港鐵 / 輕鐵 / 巴士狀態</div>
-          </div>
-          <span class="card-badge badge-live">● 實時</span>
-        </div>
-        <div class="transport-tabs" id="home-transport-tabs">
-          <button class="transport-tab active" type="button" data-target="tab-mtr">港鐵</button>
-          <button class="transport-tab" type="button" data-target="tab-lrt">輕鐵</button>
-          <button class="transport-tab" type="button" data-target="tab-bus">巴士</button>
-        </div>
-        <div class="transport-panel" id="tab-mtr">
-          <div id="h-mtr-content">
-            <div class="skel skel-p"></div>
-            <div class="skel skel-p2" style="margin-top:8px"></div>
-          </div>
-        </div>
-        <div class="transport-panel hidden" id="tab-lrt">
-          <div id="h-lrt-content">
-            <div class="skel skel-p"></div>
-            <div class="skel skel-p2" style="margin-top:8px"></div>
-          </div>
-        </div>
-        <div class="transport-panel hidden" id="tab-bus">
-          <div id="bus-presets-grid" class="grid-presets" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:var(--sp-3)"></div>
-        </div>
-      </div>
-
-      <div class="card hub-header" style="grid-area: info-header;">
-        <div class="card-title"><strong>資訊總匯</strong> Info Hub</div>
-        <div class="card-sub">科技新聞、本地快訊與機場航班狀態</div>
-      </div>
-
-      <div class="card home-panel" style="grid-area: world; display:flex; flex-direction:column; gap:var(--sp-3);">
-        <div class="card-head">
-          <div>
-            <div class="card-title"><strong>世界時間</strong> World Clocks</div>
-            <div class="card-sub">香港 / 倫敦 / 紐約</div>
-          </div>
-          <span class="card-badge badge-live">● 實時</span>
-        </div>
-        <div class="row-list" id="home-world-times">
-          <div class="row-item"><span class="row-name">香港</span><span class="row-val" id="wt-HK">--:--:--</span></div>
-          <div class="row-item"><span class="row-name">倫敦</span><span class="row-val" id="wt-LDN">--:--:--</span></div>
-          <div class="row-item"><span class="row-name">紐約</span><span class="row-val" id="wt-NY">--:--:--</span></div>
-        </div>
-      </div>
-
-      <div class="card home-panel" style="grid-area: news; display:flex; flex-direction:column; gap:var(--sp-3);">
-        <div class="card-head">
-          <div>
-            <div class="card-title"><strong>新聞跑馬燈</strong> News Ticker</div>
-            <div class="card-sub">科技與本地新聞，每 10 秒自動輪播</div>
-          </div>
-          <span class="card-badge badge-source">Google News RSS</span>
-        </div>
-        <div id="home-news-ticker" class="ticker-wrapper" aria-live="polite"></div>
-      </div>
-
-      <div class="card" style="grid-area: flights; display:flex; flex-direction:column; gap:var(--sp-3);">
-        <div class="card-head">
-          <div>
-            <div class="card-title">機場航班狀態</div>
-            <div class="card-sub">HKIA 最新出發 / 到達概況</div>
-          </div>
-          <span class="card-badge badge-source">HKIA / Data Proxy</span>
-        </div>
-        <div id="home-flight-status" class="row-list">
-          <div class="row-item"><span class="row-name">載入中…</span></div>
-        </div>
-      </div>
-
-      <div class="card" style="grid-area: fx;">
-        <div class="card-head">
-          <div>
-            <div class="card-title">💱 港元匯率與恒指</div>
-            <div class="card-sub">金融快訊一覽</div>
-          </div>
-          <span class="card-badge badge-source">Frankfurter / Yahoo</span>
-        </div>
-        <div id="fin-hsi"></div>
-        <div id="fin-fx" class="row-list" style="margin-top:var(--sp-3)"></div>
+        <div id="fin-fx" class="row-list"></div>
       </div>
 
     </div>
@@ -458,26 +314,6 @@
             <div class="row-item"><span class="row-name">紫外線指數</span><span class="row-val" id="w-uv">--</span></div>
             <div class="row-item"><span class="row-name">更新時間</span><span class="row-val" id="w-upd" style="font-size:10px;letter-spacing:0">--</span></div>
           </div>
-        </div>
-      </div>
-      
-
-      <!-- Weather mode switch -->
-      <div class="card" style="grid-column:span 3">
-        <div class="card-head">
-          <div class="card-title">資料模式 Data Mode</div>
-          <span class="card-badge badge-live">● 實時 / 歷史</span>
-        </div>
-        <div class="mode-switcher">
-          <button class="data-mode-btn active" data-mode="realtime" onclick="Weather.switchMode('realtime')">即時</button>
-          <button class="data-mode-btn" data-mode="history" onclick="Weather.switchMode('history')">歷史</button>
-        </div>
-        <div id="w-mode-current" class="data-mode-panel">
-          <div style="font-size:var(--text-sm);color:var(--text-muted)">當前模式顯示最新即時天氣數據。</div>
-        </div>
-        <div id="w-mode-history" class="data-mode-panel hidden">
-          <div style="font-size:var(--text-sm);color:var(--text-muted);margin-bottom:var(--sp-3)">顯示最近載入的歷史快照。</div>
-          <div id="w-history-list" class="row-list"></div>
         </div>
       </div>
 
@@ -1386,8 +1222,6 @@
 <script src="js/beach.js"></script>
 <script src="js/map.js"></script>
 <script src="js/finance.js"></script>
-<script src="js/worldtime.js"></script>
-<script src="js/news.js"></script>
 <script src="js/waste.js"></script>
 <script src="js/app.js"></script>
 <script>
@@ -1406,7 +1240,6 @@
 <!-- ══ MOBILE BOTTOM NAV ══ -->
 <nav class="bottom-nav" role="navigation" aria-label="頁面導航">
   <div class="bottom-nav-inner">
-    <!-- Row 1: 7 items -->
     <button class="bottom-nav-item active" data-page="home" onclick="showPage('home')">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
       總覽
@@ -1419,54 +1252,13 @@
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
       交通
     </button>
-    <button class="bottom-nav-item" data-page="bus" onclick="showPage('bus')">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/><circle cx="7" cy="17" r="1.5" fill="currentColor"/><circle cx="17" cy="17" r="1.5" fill="currentColor"/></svg>
-      巴士
-    </button>
-    <button class="bottom-nav-item" data-page="health" onclick="showPage('health')">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-      醫療
-    </button>
     <button class="bottom-nav-item" data-page="environment" onclick="showPage('environment')">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
       環境
     </button>
-    <button class="bottom-nav-item" data-page="parking" onclick="showPage('parking')">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 17V7h4a3 3 0 0 1 0 6H9"/></svg>
-      停車場
-    </button>
-    <!-- Row 2: 7 items -->
-    <button class="bottom-nav-item" data-page="tides" onclick="showPage('tides')">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12c2-3 4-3 6 0s4 3 6 0 4-3 6 0"/><path d="M2 18c2-3 4-3 6 0s4 3 6 0 4-3 6 0"/></svg>
-      潮汐
-    </button>
-    <button class="bottom-nav-item" data-page="beach" onclick="showPage('beach')">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12c2-3 4-3 6 0s4 3 6 0 4-3 6 0"/><path d="M3 18h18"/><path d="M12 2v10"/></svg>
-      泳灘
-    </button>
-    <button class="bottom-nav-item" data-page="map" onclick="showPage('map')">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
-      地圖
-    </button>
-    <button class="bottom-nav-item" data-page="ferry" onclick="showPage('ferry')">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 20h20"/><path d="M5 20V8l7-5 7 5v12"/><path d="M12 3v17"/><path d="M9 20v-5h6v5"/></svg>
-      嶼巴
-    </button>
-    <button class="bottom-nav-item" data-page="holidays" onclick="showPage('holidays')">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-      假期
-    </button>
-    <button class="bottom-nav-item" data-page="climate" onclick="showPage('climate')">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-      氣候
-    </button>
-    <button class="bottom-nav-item" data-page="cctv" onclick="showPage('cctv')">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
-      快拍
-    </button>
-    <button class="bottom-nav-item" data-page="waste" onclick="showPage('waste')">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
-      回收
+    <button class="bottom-nav-item" type="button" onclick="toggleMoreMenu()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/><circle cx="5" cy="12" r="2"/></svg>
+      更多
     </button>
   </div>
 </nav>
